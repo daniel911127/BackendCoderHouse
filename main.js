@@ -40,12 +40,24 @@ class ProductManager {
   }
 
   getProductById(ID) {
-    const validacion = this.products.filter((producto) => producto.id === ID);
-    const respuesta =
-      validacion.length === 0
-        ? 'El id del producto no se encuentra'
-        : validacion;
+    const validacion = this.products.find((producto) => producto.id === ID);
+    const respuesta = validacion ? validacion : 'Not found';
     return respuesta;
+  }
+
+  updateProduct(ID, newData) {
+    this.products = this.products.map((producto) =>
+      producto.id === ID ? { ...producto, ...newData } : producto
+    );
+
+    return 'Producto actualizado con éxito';
+  }
+  deleteProduct(ID) {
+    const index = this.products.findIndex((producto) => producto.id === ID);
+
+    this.products.splice(index, 1);
+
+    return 'Producto eliminado con éxito';
   }
 }
 
@@ -96,3 +108,23 @@ const producto = productos.getProducts();
 const productoId = productos.getProductById(5);
 console.log(producto);
 console.log(productoId);
+
+const actualizacion = productos.updateProduct(4, {
+  description: 'descripcion4 actualizada',
+  price: '124',
+  thumbnail: 'image4_nueva',
+  code: '004',
+  stock: '15',
+});
+
+console.log(actualizacion);
+const productoActualizado = productos.getProducts();
+console.log(productoActualizado);
+
+const borrar = productos.deleteProduct(4);
+
+console.log(borrar);
+
+const productoborrado = productos.getProducts();
+
+console.log(productoborrado);
