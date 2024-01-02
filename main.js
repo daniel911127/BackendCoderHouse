@@ -1,11 +1,17 @@
+import { promises as fs } from 'fs';
+import { json } from 'stream/consumers';
+
 class ProductManager {
   static id = 0;
   constructor() {
     this.products = [];
+    this.path = './productos.txt';
   }
 
-  addProduct({ title, description, price, thumbnail, code, stock }) {
-    const id = ++ProductManager.id;
+  async addProduct({ title, description, price, thumbnail, code, stock }) {
+    const idNumber = ++ProductManager.id;
+    const id = JSON.stringify(idNumber);
+
     if (title.length === 0)
       return console.log('Por favor indique el titulo del producto');
     if (description.length === 0)
@@ -33,98 +39,95 @@ class ProductManager {
       code,
       stock,
     });
+
+    await fs.writeFile(this.path, JSON.stringify(this.products));
+  }
+  async readProducts() {
+    let prods = await fs.readFile(this.path, 'utf-8');
+    return JSON.parse(prods);
+  }
+  async getProducts() {
+    let resp = await this.readProducts();
+    return console.log(resp);
   }
 
-  getProducts() {
-    return this.products.map((producto) => producto);
+  async getProductById(ID) {
+    let resp = await this.readProducts();
+    let filtro = resp.find((producto) => producto.id === ID);
+    let validacion = filtro ? filtro : 'Not found';
+    console.log(validacion);
   }
 
-  getProductById(ID) {
-    const validacion = this.products.find((producto) => producto.id === ID);
-    const respuesta = validacion ? validacion : 'Not found';
-    return respuesta;
+  async deleteProduct(ID) {
+    let resp = await this.readProducts();
+    let filtro = resp.filter((producto) => producto.id !== ID);
+    await fs.writeFile(this.path, JSON.stringify(filtro));
+    console.log(`producto con id ${ID} fue eliminado con exito`);
   }
 
-  updateProduct(ID, newData) {
-    this.products = this.products.map((producto) =>
+  async updateProduct(ID, newData) {
+    let resp = await this.readProducts();
+    let actualizacion = resp.map((producto) =>
       producto.id === ID ? { ...producto, ...newData } : producto
     );
-
-    return 'Producto actualizado con éxito';
-  }
-  deleteProduct(ID) {
-    const index = this.products.findIndex((producto) => producto.id === ID);
-
-    this.products.splice(index, 1);
-
-    return 'Producto eliminado con éxito';
+    await fs.writeFile(this.path, JSON.stringify(actualizacion));
+    console.log(`producto con id ${ID} fue actualizado con exito`);
+    //return 'Producto actualizado con éxito';
   }
 }
 
 const productos = new ProductManager();
 
-productos.addProduct({
-  title: 'titulo',
-  description: 'descripcion',
-  price: '123',
-  thumbnail: 'image',
-  code: '001',
-  stock: '20',
-});
-productos.addProduct({
-  title: 'titulo2',
-  description: 'descripcion2',
-  price: '123',
-  thumbnail: 'image2',
-  code: '002',
-  stock: '20',
-});
-productos.addProduct({
-  title: 'titulo3',
-  description: 'descripcion3',
-  price: '123',
-  thumbnail: 'image3',
-  code: '003',
-  stock: '20',
-});
-productos.addProduct({
-  title: 'titulo4',
-  description: 'descripcion4',
-  price: '123',
-  thumbnail: 'image4',
-  code: '004',
-  stock: '20',
-});
-productos.addProduct({
-  title: '',
-  description: 'descripcion4',
-  price: '123',
-  thumbnail: 'image4',
-  code: '004',
-  stock: '20',
-});
+// productos.addProduct({
+//   title: 'titulo',
+//   description: 'descripcion',
+//   price: '123',
+//   thumbnail: 'image',
+//   code: '001',
+//   stock: '20',
+// });
+// productos.addProduct({
+//   title: 'titulo2',
+//   description: 'descripcion2',
+//   price: '123',
+//   thumbnail: 'image2',
+//   code: '002',
+//   stock: '20',
+// });
+// productos.addProduct({
+//   title: 'titulo3',
+//   description: 'descripcion3',
+//   price: '123',
+//   thumbnail: 'image3',
+//   code: '003',
+//   stock: '20',
+// });
+// productos.addProduct({
+//   title: 'titulo4',
+//   description: 'descripcion4',
+//   price: '123',
+//   thumbnail: 'image4',
+//   code: '004',
+//   stock: '20',
+// });
+// productos.addProduct({
+//   title: 'titulo5',
+//   description: 'descripcion5',
+//   price: '123',
+//   thumbnail: 'image5',
+//   code: '005',
+//   stock: '20',
+// });
 
-const producto = productos.getProducts();
-const productoId = productos.getProductById(5);
-console.log(producto);
-console.log(productoId);
+productos.getProducts();
+//productos.getProductById('2');
 
-const actualizacion = productos.updateProduct(4, {
-  description: 'descripcion4 actualizada',
-  price: '124',
-  thumbnail: 'image4_nueva',
-  code: '004',
-  stock: '15',
-});
+// productos.updateProduct('4', {
+//   description: 'descripcion4 actualizada',
+//   price: '124',
+//   thumbnail: 'image4_nueva',
+//   code: '004',
+//   stock: '20',
+// });
 
-console.log(actualizacion);
-const productoActualizado = productos.getProducts();
-console.log(productoActualizado);
-
-const borrar = productos.deleteProduct(4);
-
-console.log(borrar);
-
-const productoborrado = productos.getProducts();
-
-console.log(productoborrado);
+//productos.deleteProduct('5');
