@@ -1,17 +1,16 @@
 import { promises as fs } from 'fs';
-import { json } from 'stream/consumers';
 
 class ProductManager {
   static id = 0;
   constructor() {
     this.products = [];
-    this.path = './productos.txt';
+    this.path = './productos.json';
   }
 
   async addProduct({ title, description, price, thumbnail, code, stock }) {
-    const idNumber = ++ProductManager.id;
-    const id = JSON.stringify(idNumber);
-
+    let resp = await this.readProducts();
+    let idviejo = resp.length;
+    let id = idviejo + 1;
     if (title.length === 0)
       return console.log('Por favor indique el titulo del producto');
     if (description.length === 0)
@@ -26,11 +25,10 @@ class ProductManager {
       return console.log('Por favor indique la descripcion del producto');
     if (stock.length === 0)
       return console.log('Por favor indique la cantidad de stock del producto');
-    const CODE = this.products.filter((producto) => producto.code === code);
+    const CODE = resp.filter((producto) => producto.code === code);
     if (CODE.length !== 0)
       return console.log('El codigo ya se encuentra en uso');
-
-    this.products.push({
+    const nuevoProd = {
       id,
       title,
       description,
@@ -38,13 +36,15 @@ class ProductManager {
       thumbnail,
       code,
       stock,
-    });
-
-    await fs.writeFile(this.path, JSON.stringify(this.products));
+    };
+    resp.push(nuevoProd);
+    console.log('Producto agregado con exito');
+    await fs.writeFile(this.path, JSON.stringify(resp));
   }
   async readProducts() {
     let prods = await fs.readFile(this.path, 'utf-8');
-    return JSON.parse(prods);
+    let validacion = JSON.parse(prods);
+    return validacion;
   }
   async getProducts() {
     let resp = await this.readProducts();
@@ -119,10 +119,10 @@ const productos = new ProductManager();
 //   stock: '20',
 // });
 
-productos.getProducts();
-//productos.getProductById('2');
+//productos.getProducts();
+//productos.getProductById(2);
 
-// productos.updateProduct('4', {
+// productos.updateProduct(4, {
 //   description: 'descripcion4 actualizada',
 //   price: '124',
 //   thumbnail: 'image4_nueva',
@@ -130,4 +130,15 @@ productos.getProducts();
 //   stock: '20',
 // });
 
-//productos.deleteProduct('5');
+//productos.deleteProduct(5);
+
+// productos.addProduct({
+//   title: 'titulo5nuevo',
+//   description: 'descripcion5',
+//   price: '123',
+//   thumbnail: 'image5',
+//   code: '005',
+//   stock: '20',
+// });
+
+module.exports = new ProductManager();
