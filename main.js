@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+const fs = require('fs');
 
 class ProductManager {
   static id = 0;
@@ -39,29 +39,29 @@ class ProductManager {
     };
     resp.push(nuevoProd);
     console.log('Producto agregado con exito');
-    await fs.writeFile(this.path, JSON.stringify(resp));
+    await fs.promises.writeFile(this.path, JSON.stringify(resp));
   }
   async readProducts() {
-    let prods = await fs.readFile(this.path, 'utf-8');
+    let prods = await fs.promises.readFile(this.path, 'utf-8');
     let validacion = JSON.parse(prods);
     return validacion;
   }
   async getProducts() {
     let resp = await this.readProducts();
-    return console.log(resp);
+    return resp;
   }
 
   async getProductById(ID) {
     let resp = await this.readProducts();
     let filtro = resp.find((producto) => producto.id === ID);
     let validacion = filtro ? filtro : 'Not found';
-    console.log(validacion);
+    return validacion;
   }
 
   async deleteProduct(ID) {
     let resp = await this.readProducts();
     let filtro = resp.filter((producto) => producto.id !== ID);
-    await fs.writeFile(this.path, JSON.stringify(filtro));
+    await fs.promises.writeFile(this.path, JSON.stringify(filtro));
     console.log(`producto con id ${ID} fue eliminado con exito`);
   }
 
@@ -70,7 +70,7 @@ class ProductManager {
     let actualizacion = resp.map((producto) =>
       producto.id === ID ? { ...producto, ...newData } : producto
     );
-    await fs.writeFile(this.path, JSON.stringify(actualizacion));
+    await fs.promises.writeFile(this.path, JSON.stringify(actualizacion));
     console.log(`producto con id ${ID} fue actualizado con exito`);
     //return 'Producto actualizado con éxito';
   }
@@ -119,7 +119,7 @@ const productos = new ProductManager();
 //   stock: '20',
 // });
 
-//productos.getProducts();
+productos.getProducts();
 //productos.getProductById(2);
 
 // productos.updateProduct(4, {
