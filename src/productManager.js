@@ -7,7 +7,15 @@ class ProductManager {
     this.path = './productos.json';
   }
 
-  async addProduct({ title, description, price, thumbnail, code, stock }) {
+  async addProduct({
+    title,
+    description,
+    price,
+    thumbnail,
+    code,
+    status,
+    stock,
+  }) {
     let resp = await this.readProducts();
     let idviejo = resp.length;
     let id = idviejo + 1;
@@ -35,11 +43,13 @@ class ProductManager {
       price,
       thumbnail,
       code,
+      status,
       stock,
     };
     resp.push(nuevoProd);
     console.log('Producto agregado con exito');
     await fs.promises.writeFile(this.path, JSON.stringify(resp));
+    return nuevoProd;
   }
   async readProducts() {
     let prods = await fs.promises.readFile(this.path, 'utf-8');
@@ -62,16 +72,17 @@ class ProductManager {
     let resp = await this.readProducts();
     let filtro = resp.filter((producto) => producto.id !== ID);
     await fs.promises.writeFile(this.path, JSON.stringify(filtro));
-    console.log(`producto con id ${ID} fue eliminado con exito`);
+    return `producto con id ${ID} fue eliminado con exito`;
   }
 
+  //falta validar que exista el producto
   async updateProduct(ID, newData) {
     let resp = await this.readProducts();
     let actualizacion = resp.map((producto) =>
       producto.id === ID ? { ...producto, ...newData } : producto
     );
     await fs.promises.writeFile(this.path, JSON.stringify(actualizacion));
-    console.log(`producto con id ${ID} fue actualizado con exito`);
+    return `producto con id ${ID} fue actualizado con exito`;
     //return 'Producto actualizado con éxito';
   }
 }
