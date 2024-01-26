@@ -23,7 +23,7 @@ cartsRouter.get('/:id', async (req, res) => {
   }
 });
 
-cartsRouter.post('/:cid/productd/:pid', async (req, res) => {
+cartsRouter.post('/:cid/product/:pid', async (req, res) => {
   const { cid, pid } = req.params;
   try {
     const resp = await cartManager.AddProductCart(cid, pid);

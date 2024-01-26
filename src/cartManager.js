@@ -3,7 +3,7 @@ const fs = require('fs');
 class CartManager {
   static id = 0;
   constructor() {
-    this.path = './cart.json';
+    this.path = './carts.json';
     this.carts = [];
   }
 
@@ -20,7 +20,7 @@ class CartManager {
 
   async getCartsProducts(ID) {
     let resp = await this.getCarts();
-    let cart = resp.find((cart) => cart.id === ID);
+    let cart = resp.find((cart) => cart.id == ID);
     if (cart) {
       return cart.products;
     } else {
@@ -41,16 +41,17 @@ class CartManager {
 
   async AddProductCart(cartId, prodId) {
     let carts = await this.getCarts();
-    let cid = carts.findIndex((cart) => cart.id === cartId);
+    let cid = carts.findIndex((cart) => cart.id == cartId);
 
     if (cid !== -1) {
-      let cartProducts = await getCartsProducts(cartId);
+      let cartProducts = await this.getCartsProducts(cartId);
+      console.log(cartProducts);
       let productId = cartProducts.findIndex(
-        (product) => product.id === prodId
+        (product) => product.prodId == prodId
       );
-
+      console.log(productId);
       if (productId !== -1) {
-        cartProducts[prodId].quantity = cartProducts[prodId].quantity + 1;
+        cartProducts[productId].quantity = cartProducts[productId].quantity + 1;
       } else {
         cartProducts.push({ prodId, quantity: 1 });
       }

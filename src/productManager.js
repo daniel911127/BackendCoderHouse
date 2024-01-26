@@ -25,8 +25,6 @@ class ProductManager {
       return console.log('Por favor indique la descripcion del producto');
     if (price.length === 0)
       return console.log('Por favor indique el precio del producto');
-    if (thumbnail.length === 0)
-      return console.log('Por favor indique la ruta de la imagen del producto');
     if (code.length === 0)
       return console.log('Por favor indique el codigo del producto');
     if (description.length === 0)
