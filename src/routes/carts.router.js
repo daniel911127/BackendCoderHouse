@@ -13,6 +13,14 @@ cartsRouter.post('/', async (req, res) => {
   }
 });
 
+cartsRouter.get('/', async (req, res) => {
+  try {
+    const resp = await CartManager.getCarts();
+    res.json(resp);
+  } catch (error) {
+    res.send('Error al obtener carritos');
+  }
+});
 cartsRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {

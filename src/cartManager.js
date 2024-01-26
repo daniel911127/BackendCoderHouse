@@ -29,8 +29,10 @@ class CartManager {
   }
 
   async newCart() {
-    let idviejo = this.carts.length;
+    let carritos = await this.getCarts();
+    let idviejo = carritos.length;
     let id = idviejo + 1;
+
     let newCart = { id, products: [] };
     this.carts = await this.getCarts();
     this.carts.push(newCart);
