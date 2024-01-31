@@ -1,4 +1,24 @@
 const socket = io();
+
+document.getElementById('formulario').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const codigo = id.value;
+  const titulo = title.value;
+  const precio = price.value;
+  const descripcion = description.value;
+  const unidades = stock.value;
+  if (!codigo || !titulo || !descripcion || !precio || !unidades) {
+    console.log('Todos los campos son obligatorios');
+    return;
+  }
+  socket.emit('new-product', {
+    id: codigo,
+    title: titulo,
+    description: descripcion,
+    price: precio,
+    stock: unidades,
+  });
+});
 let user;
 let chatBox = document.getElementById('chatBox');
 Swal.fire({

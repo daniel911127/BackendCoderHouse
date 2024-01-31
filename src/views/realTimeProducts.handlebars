@@ -1,0 +1,37 @@
+<div>
+  <p>
+    Productos
+  </p>
+  
+  <table>
+    <thead>
+      <th>CODIGO</th>
+      <th>TITULO</th>
+      <th>DESCRIPCION</th>
+      <th>PRECIO</th>
+      <th>STOCK</th>
+    </thead>
+    <tbody id="productostiemporeal">
+        {{#each products}}
+      <tr>
+          <td>{{this.code}}</td>
+          <td>{{this.title}}</td>
+          <td>{{this.description}}</td>
+          <td>${{this.price}}</td>
+          <td>{{this.stock}}</td>
+      </tr>
+        {{/each}}
+    </tbody>
+  </table>
+</div>
+<form action="/">
+  <input type="text" id="code" placeholder="Codigo">
+  <input type="text" id="title" placeholder="Titulo">
+  <input type="text" id="description" placeholder="Descripcion">
+  <input type="text" id="price" placeholder="Precio">
+  <input type="text" id="stock" placeholder="Stock">
+  <button type="submit">CREAR</button>
+</form>
+<a href="/"><p>ir a productos</p></a>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

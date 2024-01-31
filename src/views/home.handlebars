@@ -1,0 +1,30 @@
+<h1>
+  Aqui Encontraras todos nuestros productos
+</h1>
+<div>
+  <p>
+    Productos
+  </p>
+  <table>
+    <thead>
+      <th>CODIGO</th>
+      <th>TITULO</th>
+      <th>DESCRIPCION</th>
+      <th>PRECIO</th>
+      <th>STOCK</th>
+    </thead>
+    <tbody>
+        {{#each products}}
+      <tr>
+          <td>{{code}}</td>
+          <td>{{title}}</td>
+          <td>{{description}}</td>
+          <td>${{price}}</td>
+          <td>{{stock}}</td>
+      </tr>
+        {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<a href="/realtimeproducts">ir a formulario</a>
