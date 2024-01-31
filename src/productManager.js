@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'fs';
 
-class ProductManager {
+class productManager {
   static id = 0;
   constructor() {
     this.products = [];
@@ -85,7 +85,7 @@ class ProductManager {
   }
 }
 
-const productos = new ProductManager();
+const productos = new productManager();
 
 // productos.addProduct({
 //   title: 'titulo',
@@ -150,4 +150,4 @@ productos.getProducts();
 //   stock: '20',
 // });
 
-module.exports = new ProductManager();
+export default productManager;
