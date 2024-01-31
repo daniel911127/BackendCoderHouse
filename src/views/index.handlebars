@@ -1,18 +1,12 @@
-<div >
-  <h1>¡Hola, {{user.name}} {{user.Last_name}}! ¡Que gusto verte!</h1>
-  <p>tu edad es {{user.edad}}</p>
-  <p>tu correo es {{user.correo}}</p>
-  <p>tu telefono es {{user.telefono}}</p>
-
-  {{#if isAdmin}}
-    {{#each food}}
-      <div>
-        <p>{{this.name}}</p>
-        <p>{{this.price}}</p>
-      </div>
-    {{/each}}
-  {{else}}
-    <p>No tienes permisos para ver la lista de alimentos</p>
-  {{/if}}
+<h1>
+  Bienvenidos al coderchat
+</h1>
+<div>
+  <p id="messageLogs"></p>
 </div>
-<script src="js/index.js"></script>
+<div>
+  <input type="text" name="" id="chatBox">
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

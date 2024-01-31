@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import productManager from '../productManager.js';
-
 const productsRouter = Router();
+
+const prodsManager = new productManager();
 
 productsRouter.get('/', async (req, res) => {
   try {
     const { limit } = req.query;
-    const productos = await productManager.getProducts();
+    const productos = await prodsManager.getProducts();
 
     if (limit) {
       const limitProducts = productos.slice(0, limit);
@@ -22,7 +23,7 @@ productsRouter.get('/', async (req, res) => {
 productsRouter.get('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   try {
-    const producto = await productManager.getProductById(id);
+    const producto = await prodsManager.getProductById(id);
     res.json(producto);
   } catch (err) {
     console.log(err);
@@ -41,7 +42,7 @@ productsRouter.post('/', async (req, res) => {
       status = true,
       stock,
     } = req.body;
-    const response = await productManager.addProduct({
+    const response = await prodsManager.addProduct({
       title,
       description,
       price,
@@ -69,7 +70,7 @@ productsRouter.put('/:id', async (req, res) => {
       status = true,
       stock,
     } = req.body;
-    const response = await productManager.updateProduct(id, {
+    const response = await prodsManager.updateProduct(id, {
       title,
       description,
       price,
@@ -88,7 +89,7 @@ productsRouter.put('/:id', async (req, res) => {
 productsRouter.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   try {
-    await productManager.deleteProduct(id);
+    await prodsManager.deleteProduct(id);
     res.send('Producto eliminado con exito');
   } catch (err) {
     console.log(err);

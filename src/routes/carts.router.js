@@ -2,10 +2,11 @@ import Router from 'express';
 import cartManager from '../cartManager.js';
 
 const cartsRouter = Router();
+const cart = new cartManager();
 
 cartsRouter.post('/', async (req, res) => {
   try {
-    const resp = await cartManager.newCart();
+    const resp = await cart.newCart();
     res.json(resp);
   } catch (error) {
     console.log(error);
@@ -15,7 +16,7 @@ cartsRouter.post('/', async (req, res) => {
 
 cartsRouter.get('/', async (req, res) => {
   try {
-    const resp = await cartManager.getCarts();
+    const resp = await cart.getCarts();
     res.json(resp);
   } catch (error) {
     console.log(error);
@@ -25,7 +26,7 @@ cartsRouter.get('/', async (req, res) => {
 cartsRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const resp = await cartManager.getCartsProducts(id);
+    const resp = await cart.getCartsProducts(id);
     res.json(resp);
   } catch (error) {
     console.log(error);
@@ -36,7 +37,7 @@ cartsRouter.get('/:id', async (req, res) => {
 cartsRouter.post('/:cid/product/:pid', async (req, res) => {
   const { cid, pid } = req.params;
   try {
-    const resp = await cartManager.AddProductCart(cid, pid);
+    const resp = await cart.AddProductCart(cid, pid);
     res.send(resp);
   } catch (error) {
     console.log(error);

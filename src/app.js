@@ -11,7 +11,7 @@ const port = 8080;
 const httpServer = app.listen(port, (req, res) => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });
-const socketServer = new Server(httpServer);
+const io = new Server(httpServer);
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,25 +29,17 @@ app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
-socketServer.on('connection', (socket) => {
+let messages = [];
+io.on('connection', (socket) => {
   console.log('nuevo cliente conectado');
 
   socket.on('message', (data) => {
-    console.log(data);
+    messages.push(data);
+    io.emit('messageLogs', messages);
   });
 
-  socket.emit(
-    'evento_para_socket_individual',
-    'Este evento solo lo debe recibir el socket actual'
-  );
-
-  socket.broadcast.emit(
-    'evento_pata_todos_menos_el_socket_actual',
-    'Se conecto otro cliente'
-  );
-
-  socketServer.emit(
-    'evento_para_todos',
-    'Este evento esta siendo escuchado por todos'
-  );
+  socket.on('login', (data) => {
+    socket.emit('messageLogs', messages);
+    socket.broadcast.emit('register', data);
+  });
 });
